@@ -1,0 +1,10 @@
+
+
+
+
+
+
+
+//出现过速度测量时，负速度周期性出现数据溢出
+//原因为速度测量程序中if ( (TIM3->CR1 & TIM_COUNTERMODE_DOWN) == TIM_COUNTERMODE_DOWN) 
+//写成了if ( (TIM3->CR1 & TIM_COUNTERMODE_UP) == TIM_COUNTERMODE_DOWN) 

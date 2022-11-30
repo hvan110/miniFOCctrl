@@ -1,0 +1,73 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.33.0.0
+Copyright (C) 2020 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 111 Administrator, 111, LIC=21E4T-RMBWZ-56DQ2-9EVM9-ALN2Z-F3CWR
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.33.0.0
+Toolchain Path:  E:\soft2\Keil533\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.33.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      Segger\JL2CM3.dll V2.99.34.0
+Dialog DLL:      TCM.DLL V1.48.0.0
+ 
+<h2>Project:</h2>
+M:\ËØ²Ä\³¬ÃÔÄãFOCÇý¶¯Æ÷\¿ªÔ´ÎÄ¼þ¼Ð\software\GB6010_Motor_AS5048A\MDK-ARM\1110.uvprojx
+Project File Date:  11/30/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'E:\soft2\Keil533\ARM\ARMCC\Bin'
+Build target '1110'
+compiling motor.c...
+..\motor.c(250): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	if(temp<Udc*0.95 || temp>Udc*1.05)
+..\motor.c(250): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	if(temp<Udc*0.95 || temp>Udc*1.05)
+..\motor.c(303): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	if(ABS(d_angle)>0.8*cpr)
+..\motor.c(346): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	Iab_temp.Ia =(int16_t)((int16_t)hPhaseA_OffSet-(int16_t)HAL_ADCEx_InjectedGetValue(&hadc1,ADC_INJECTED_RANK_1)) * SAMPLE_CURR_CON_FACTOR;
+..\motor.c(347): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	Iab_temp.Ib =(int16_t)((int16_t)hPhaseB_OffSet-(int16_t)HAL_ADCEx_InjectedGetValue(&hadc1,ADC_INJECTED_RANK_2)) * SAMPLE_CURR_CON_FACTOR;
+..\motor.c(78): warning:  #177-D: variable "FullRotationOffset"  was declared but never referenced
+  static float FullRotationOffset;
+..\motor.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=34872 RO-data=15988 RW-data=280 ZI-data=2312  
+"1110\1110.axf" - 0 Error(s), 6 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.7.0.pack
+                ARM.CMSIS.5.7.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.4.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.11.0.pack
+                Keil.STM32F4xx_DFP.2.11.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_1110
+  E:\soft2\Keil533\PACK\ARM\CMSIS\5.7.0\CMSIS\Core\Include
+  E:\soft2\Keil533\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.4.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>
