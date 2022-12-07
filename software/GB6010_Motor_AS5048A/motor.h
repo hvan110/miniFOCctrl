@@ -11,7 +11,7 @@ typedef int int32_T;
 typedef float real32_T;
 typedef double real64_T;
 
-
+#define PWM_TIM_PULSE_TPWM  (CKTIM/(PWM_FREQ))
 #define Udc 24.0f
 #define PI					3.14159265358979f
 #define ADC_REF_V                   (float)(3.3f)
@@ -60,7 +60,7 @@ typedef double real64_T;
 #define TW_BEFORE (((u16)(((((u16)(SAMPLING_TIME_NS)))*168uL)/1000ul))+1)
 
 
-#define Start_V 3.5f//定义启动力矩
+#define Start_V 3.5f//露篓脪氓脝么露炉脕娄戮脴
 #define cpr (float)(2.0f*PI)
 #define Max_Vbus 24.0F
 
