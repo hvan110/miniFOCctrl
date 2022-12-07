@@ -108,7 +108,7 @@ void board_config(void)
 	
 	
 }
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc)//ADC»Øµ÷º¯Êý
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc)//ADCå›žè°ƒå‡½æ•°
 {
 	if(State==RUN)
 		foc_algorithm_step();	
@@ -204,7 +204,7 @@ void foc_algorithm_step(void)
   Current_PID_Calc(IQ_REF,Current_Idq.Iq,&Voltage_DQ.Vq,&Current_Q_PID); 
 	
 	Rev_Park_Transf(Voltage_DQ,Transf_Cos_Sin,&Voltage_Alpha_Beta); 
-	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_PERIOD);
+	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_TIM_PULSE_TPWM);
 
 }
 void Start_Up(void)
@@ -213,7 +213,7 @@ void Start_Up(void)
   Voltage_DQ.Vq=0.0f;
 	Angle_To_Cos_Sin(0.0f,&Transf_Cos_Sin); 
 	Rev_Park_Transf(Voltage_DQ,Transf_Cos_Sin,&Voltage_Alpha_Beta); 
-	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_PERIOD);	
+	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_TIM_PULSE_TPWM);	
 	HAL_Delay(300);
 	encoder_offset = ENC_Get_Electrical_Angle();
 	HAL_Delay(20);
@@ -221,7 +221,7 @@ void Start_Up(void)
   Voltage_DQ.Vq=0.0f;
 	Angle_To_Cos_Sin(0.0f,&Transf_Cos_Sin); 
 	Rev_Park_Transf(Voltage_DQ,Transf_Cos_Sin,&Voltage_Alpha_Beta); 
-	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_PERIOD);
+	SVPWM_Calc(Voltage_Alpha_Beta,Udc,PWM_TIM_PULSE_TPWM);
 	State=RUN;
 }
 
@@ -429,7 +429,7 @@ void Speed_Pid_Calc(real32_T ref_temp,real32_T fdb_temp,real32_T* out_temp,SPEED
   real32_T error;
   real32_T temp;
 
-  error =  ref_temp - fdb_temp;             //2*piµÄ×÷ÓÃÊÇ µ¥Î»×ª»»   Hz×ª»»Îªrad/s
+  error =  ref_temp - fdb_temp;             //2*piçš„ä½œç”¨æ˜¯ å•ä½è½¬æ¢   Hzè½¬æ¢ä¸ºrad/s
 
   temp = (error + current_pid_temp->I_Sum) * current_pid_temp->P_Gain;
 
@@ -472,12 +472,12 @@ void Posi_Pid_Calc(real32_T ref_temp,real32_T fdb_temp,real32_T* out_temp,POSI_P
 
 
 /**********************************************************************************************************
-Clarke±ä»»£¬ÊäÈëIa,Ib£¬µÃµ½IalphaºÍIbeta
+Clarkeå˜æ¢ï¼Œè¾“å…¥Ia,Ibï¼Œå¾—åˆ°Ialphaå’ŒIbeta
 **********************************************************************************************************/ 
 /***************************************
-¹¦ÄÜ£ºClark±ä»»
-ÐÎ²Î£ºÈýÏàµçÁ÷ÒÔ¼°alpha_betaµçÁ÷
-ËµÃ÷£ºÓÉÈýÏà»¥²î120¶È±ä»»µ½Á½Ïà»¥²î90¶È
+åŠŸèƒ½ï¼šClarkå˜æ¢
+å½¢å‚ï¼šä¸‰ç›¸ç”µæµä»¥åŠalpha_betaç”µæµ
+è¯´æ˜Žï¼šç”±ä¸‰ç›¸äº’å·®120åº¦å˜æ¢åˆ°ä¸¤ç›¸äº’å·®90åº¦
 ***************************************/
 void Clarke_Transf(CURRENT_ABC_DEF Current_abc_temp,CURRENT_ALPHA_BETA_DEF* Current_alpha_beta_temp)
 {
@@ -485,9 +485,9 @@ void Clarke_Transf(CURRENT_ABC_DEF Current_abc_temp,CURRENT_ALPHA_BETA_DEF* Curr
   Current_alpha_beta_temp->Ibeta = (Current_abc_temp.Ib - Current_abc_temp.Ic) * 0.866025388F * 2.0F / 3.0F;
 }
 /***************************************
-¹¦ÄÜ£ºCOS_SINÖµ¼ÆËã
-ÐÎ²Î£º½Ç¶ÈÒÔ¼°COS_SIN½á¹¹Ìå
-ËµÃ÷£ºCOS_SINÖµ¼ÆËã
+åŠŸèƒ½ï¼šCOS_SINå€¼è®¡ç®—
+å½¢å‚ï¼šè§’åº¦ä»¥åŠCOS_SINç»“æž„ä½“
+è¯´æ˜Žï¼šCOS_SINå€¼è®¡ç®—
 ***************************************/
 void Angle_To_Cos_Sin(real32_T angle_temp,TRANSF_COS_SIN_DEF* cos_sin_temp)
 {
@@ -495,9 +495,9 @@ void Angle_To_Cos_Sin(real32_T angle_temp,TRANSF_COS_SIN_DEF* cos_sin_temp)
   cos_sin_temp->Sin = arm_sin_f32(angle_temp);
 }
 /***************************************
-¹¦ÄÜ£ºPARK±ä»»
-ÐÎ²Î£ºalpha_betaµçÁ÷¡¢COS_SINÖµ¡¢DQÖáµçÁ÷
-ËµÃ÷£º½»Á÷±äÖ±Á÷
+åŠŸèƒ½ï¼šPARKå˜æ¢
+å½¢å‚ï¼šalpha_betaç”µæµã€COS_SINå€¼ã€DQè½´ç”µæµ
+è¯´æ˜Žï¼šäº¤æµå˜ç›´æµ
 ***************************************/
 void Park_Transf(CURRENT_ALPHA_BETA_DEF current_alpha_beta_temp,TRANSF_COS_SIN_DEF cos_sin_temp,CURRENT_DQ_DEF* current_dq_temp)
 {
@@ -505,9 +505,9 @@ void Park_Transf(CURRENT_ALPHA_BETA_DEF current_alpha_beta_temp,TRANSF_COS_SIN_D
   current_dq_temp->Iq = -current_alpha_beta_temp.Ialpha * cos_sin_temp.Sin + current_alpha_beta_temp.Ibeta * cos_sin_temp.Cos;
 }
 /***************************************
-¹¦ÄÜ£º·´PARK±ä»»
-ÐÎ²Î£ºDQÖáµçÑ¹¡¢COS_SINÖµ¡¢alpha_betaµçÑ¹
-ËµÃ÷£ºÖ±Á÷±ä½»Á÷
+åŠŸèƒ½ï¼šåPARKå˜æ¢
+å½¢å‚ï¼šDQè½´ç”µåŽ‹ã€COS_SINå€¼ã€alpha_betaç”µåŽ‹
+è¯´æ˜Žï¼šç›´æµå˜äº¤æµ
 ***************************************/
 void Rev_Park_Transf(VOLTAGE_DQ_DEF v_dq_temp,TRANSF_COS_SIN_DEF cos_sin_temp,VOLTAGE_ALPHA_BETA_DEF* v_alpha_beta_temp)
 {
@@ -518,9 +518,9 @@ void Rev_Park_Transf(VOLTAGE_DQ_DEF v_dq_temp,TRANSF_COS_SIN_DEF cos_sin_temp,VO
 
 
 /***************************************
-¹¦ÄÜ£ºSVPWM¼ÆËã
-ÐÎ²Î£ºalpha_betaµçÑ¹ÒÔ¼°Ä¸ÏßµçÑ¹¡¢¶¨Ê±Æ÷ÖÜÆÚ
-ËµÃ÷£º¸ù¾Ýalpha_betaµçÑ¹¼ÆËãÈýÏàÕ¼¿Õ±È
+åŠŸèƒ½ï¼šSVPWMè®¡ç®—
+å½¢å‚ï¼šalpha_betaç”µåŽ‹ä»¥åŠæ¯çº¿ç”µåŽ‹ã€å®šæ—¶å™¨å‘¨æœŸ
+è¯´æ˜Žï¼šæ ¹æ®alpha_betaç”µåŽ‹è®¡ç®—ä¸‰ç›¸å ç©ºæ¯”
 ***************************************/
 void SVPWM_Calc(VOLTAGE_ALPHA_BETA_DEF v_alpha_beta_temp,real32_T Udc_temp,real32_T Tpwm_temp)
 {
@@ -532,7 +532,7 @@ void SVPWM_Calc(VOLTAGE_ALPHA_BETA_DEF v_alpha_beta_temp,real32_T Udc_temp,real3
   Tcmp1 = 0.0F;
   Tcmp2 = 0.0F;
   Tcmp3 = 0.0F;
-	Tcmp4 = 0;//¼ÆËã²ÉÑùÊ±»ú
+	Tcmp4 = 0;//è®¡ç®—é‡‡æ ·æ—¶æœº
   if (v_alpha_beta_temp.Vbeta > 0.0F) {
     sector = 1;
   }
